@@ -5,6 +5,8 @@ const Koa = require('koa')
     , static = require('koa-static')
     , session = require('koa-session')
     , bodyParser = require('koa-bodyparser')
+    , sd = require('silly-datetime')
+    , jsonp = require('koa-jsonp')
     // 引入路由模块
     , admin = require('./routes/admin')
     , api = require('./routes/api')
@@ -14,6 +16,9 @@ const app = new Koa()
 
 // 配置post提交数据的中间件
 app.use(bodyParser());
+
+// 配置jsonp的中间件
+app.use(jsonp());
 
 // 配置session中间件
 app.keys = ['some secret hurr']
@@ -34,7 +39,10 @@ app.use(session(CONFIG, app))
 render(app, {
   root: path.join(__dirname, 'views'),
   extname: '.html',
-  debug: process.env.NODE_ENV !== 'production'
+  debug: process.env.NODE_ENV !== 'production',
+  dateFormat: dateFormat = function(value) {
+    return sd.format(value, 'YYYY-MM-DD HH:mm')
+  } // 扩展模板里面的方法
 });
 
 // 配置静态资源中间件

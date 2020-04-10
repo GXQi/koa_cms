@@ -21,6 +21,12 @@ router.get('/', async (ctx) => {
     if(result.length) {
       // console.log(result)
       ctx.session.userinfo = result[0]
+
+      // 更新用户表 改变用户登录时间
+      await DB.update('admin', {'_id': DB.getObjectID(result[0]._id)}, {
+        'last_time': new Date()
+      })
+
       ctx.redirect(ctx.state.__HOST__ + '/admin')
     } else {
       ctx.render('admin/error', {
@@ -52,6 +58,11 @@ router.get('/', async (ctx) => {
   // 设置响应头
   ctx.response.type = 'image/svg+xml'
   ctx.body = captcha.data
+})
+// 退出登录
+.get('/loginOut', async (ctx) => {
+  ctx.session.userinfo = null
+  ctx.redirect(ctx.state.__HOST__ + '/admin/login')
 })
 
 module.exports = router.routes()
