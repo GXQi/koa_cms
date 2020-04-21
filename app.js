@@ -42,7 +42,7 @@ render(app, {
   debug: process.env.NODE_ENV !== 'production',
   dateFormat: dateFormat = function(value) {
     return sd.format(value, 'YYYY-MM-DD HH:mm')
-  } // 扩展模板里面的方法
+  } // 扩展模板里面的方法 管道日期
 });
 
 // 配置静态资源中间件

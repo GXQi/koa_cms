@@ -7,7 +7,6 @@
 			</script>
 
 			{{include 'admin/public/nav_top.html'}}
-
 		</div>
 
 		<div class="main-container" id="main-container">
@@ -20,7 +19,8 @@
 					<span class="menu-text"></span>
 				</a>
 
-				<!-- 左侧导航 -->
+				<!--左侧导航-->
+
 				{{include 'admin/public/nav_left.html'}}
 
 				<div class="main-content">
@@ -51,7 +51,7 @@
 
 						<div class="page-header">
 							<h1>
-								管理员列表								
+								分类列表
 							</h1>
 						</div><!-- /.page-header -->
 
@@ -60,20 +60,13 @@
 						<!--表格-->
 
 						<div class="table-responsive">
-							<table id="sample-table-1" class="table table-striped table-bordered table-hover center">
+							<table id="sample-table-1" class="table table-striped table-bordered table-hover left">
 								<thead>
 									<tr>
-										<!-- <th class="center">
-											<label>
-												<input type="checkbox" class="ace">
-												<span class="lbl"></span>
-											</label>
-										</th> -->
-										<th class="center">管理员</th>
-										<th class="center">
-											<i class="icon-time bigger-110 hidden-480"></i>
-											最后登录
-										</th>
+
+										<th class="left">分类名称</th>
+
+
 										<th class="center">状态</th>
 
 										<th width="100px;" class="center">操作</th>
@@ -82,40 +75,94 @@
 
 								<tbody>
 
-									{{each list}}
-
+								{{each list}}
 									<tr class="">
-										<td>
-											{{$value.username}}
+
+
+										<td >
+											{{$value.title}}
 										</td>
-										<td>{{$value.last_time | dateFormat}}</td>
+
 										<td class="hidden-480">
-											{{if $value.status == 1}}
-												<img src="{{__HOST__}}/admin/images/yes.gif" onclick="app.toggle(this, 'admin', 'status', '{{@$value._id}}')" />
+											{{if $value.status==1}}
+												<img src="{{__HOST__}}/admin/images/yes.gif" onclick="app.toggle(this,'articlecate','status','{{@$value._id}}')" />
 											{{else}}
-												<img src="{{__HOST__}}/admin/images/no.gif" onclick="app.toggle(this, 'admin', 'status', '{{@$value._id}}')" />
+												<img src="{{__HOST__}}/admin/images/no.gif" onclick="app.toggle(this,'articlecate','status','{{@$value._id}}')" />
 											{{/if}}
 										</td>
 
 										<td>
 											<div class="visible-md visible-lg hidden-sm hidden-xs btn-group center">
-												
-												<a href="{{__HOST__}}/admin/manage/edit?id={{@$value._id}}">
+
+
+												<a href="{{__HOST__}}/admin/articlecate/edit?id={{@$value._id}}">
+
 													<button class="btn btn-xs btn-info">
 														<i class="icon-edit bigger-120"></i>
 													</button>
 												</a>
-												<a class="delete" href="{{__HOST__}}/admin/remove?collection=admin&id={{@$value._id}}">
+
+												<a class="delete" href="{{__HOST__}}/admin/remove?collection=articlecate&id={{@$value._id}}">
+
+
 													<button class="btn btn-xs btn-danger">
 														<i class="icon-trash bigger-120"></i>
 													</button>
+
 												</a>
 
 											</div>
 
 										</td>
 									</tr>
-									{{/each}}
+
+
+
+									{{each $value.list}}
+											<tr class="subtitle">
+
+
+												<td >
+													-----{{$value.title}}
+												</td>
+
+												<td class="hidden-480">
+													{{if $value.status==1}}
+													<img src="{{__HOST__}}/admin/images/yes.gif" onclick="app.toggle(this,'articlecate','status','{{@$value._id}}')" />
+													{{else}}
+													<img src="{{__HOST__}}/admin/images/no.gif" onclick="app.toggle(this,'articlecate','status','{{@$value._id}}')" />
+													{{/if}}
+												</td>
+
+												<td>
+													<div class="visible-md visible-lg hidden-sm hidden-xs btn-group center">
+
+
+														<a href="{{__HOST__}}/admin/articlecate/edit?id={{@$value._id}}">
+
+															<button class="btn btn-xs btn-info">
+																<i class="icon-edit bigger-120"></i>
+															</button>
+														</a>
+
+														<a class="delete" href="{{__HOST__}}/admin/remove?collection=articlecate&id={{@$value._id}}">
+
+
+															<button class="btn btn-xs btn-danger">
+																<i class="icon-trash bigger-120"></i>
+															</button>
+
+														</a>
+
+													</div>
+
+												</td>
+											</tr>
+
+											{{/each}}
+
+								{{/each}}
+
 								</tbody>
 							</table>
 						</div>
@@ -130,7 +177,9 @@
 			</a>
 		</div><!-- /.main-container -->
 
-		{{include 'admin/public/footer.html'}}
+
+
+	{{include 'admin/public/footer.html'}}
 
 		<script type="text/javascript">
 			jQuery(function($) {

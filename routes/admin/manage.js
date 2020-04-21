@@ -84,11 +84,5 @@ router.get('/', async (ctx) => {
     })
   }
 })
-.get('/delete', async (ctx) => {
-  // ctx.body = '删除用户'
-  var id = ctx.query.id
-  var deleteResult = await DB.remove('admin', {'_id': DB.getObjectID(id)})
-  ctx.redirect(ctx.state.__HOST__ + '/admin/manage')
-})
 
 module.exports = router.routes()

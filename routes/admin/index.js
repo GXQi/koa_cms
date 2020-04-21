@@ -42,5 +42,16 @@ router.get('/', async (ctx) => {
 
   }
 })
+.get('/remove', async (ctx) => {
+  try {
+    var collectionName = ctx.query.collection
+    var id = ctx.query.id
+
+    var result = DB.remove(collectionName, {"_id": DB.getObjectID(id)})
+    ctx.redirect(ctx.state.G.prevPage)
+  } catch(err) {
+    ctx.redirect(ctx.state.G.prevPage)
+  }
+})
 
 module.exports = router.routes()
