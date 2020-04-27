@@ -6,7 +6,14 @@ const router = require('koa-router')()
     , manage = require('./admin/manage')
     , articlecate = require('./admin/articlecate')
     , article = require('./admin/article')
+    , ueditor = require('koa2-ueditor')
 
+
+//注意上传图片的路由   ueditor.config.js配置图片post的地址
+router.all('/editorUpload', ueditor(['public', {
+  "imageAllowFiles": [".png", ".jpg", ".jpeg"],
+  "imagePathFormat": "/upload/ueditor/image/{yyyy}{mm}{dd}/{filename}"  // 保存为原文件名
+}]))
 
 // 配置中间件 获取url地址
 router.use(async (ctx, next) => {

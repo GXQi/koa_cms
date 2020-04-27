@@ -60,17 +60,75 @@ router.get('/', async (ctx) => {
 })
 .get('/add', async (ctx) => {
   // 获取一级分类
-  var result = await DB.find('article', {'pid': '0'})
+  var result = await DB.find('articlecate', {})
   await ctx.render('admin/article/add', {
-    catelist: result
+    catelist: tools.cateToList(result)
   })
 })
-.post('/doAdd', upload.single('pic'), async (ctx) => {
-  ctx.body = {
-    filename: ctx.req.file.filename,
-    body: ctx.req.body
+.post('/doAdd', upload.single('img_url'), async (ctx) => {
+  var pid = ctx.req.body.pid
+  var catename = ctx.req.body.catename
+  var title = ctx.req.body.title.trim()
+  var author = ctx.req.body.author.trim()
+  var pic = ctx.req.body.pic
+  var status = ctx.req.body.status
+  var is_best = ctx.req.body.is_best
+  var is_hot = ctx.req.body.is_hot
+  var is_new = ctx.req.body.is_new
+  var keywords = ctx.req.body.keywords
+  var description = ctx.req.body.description || ''
+  var content = ctx.req.body.content || ''
+  var img_url = ctx.req.file ? ctx.req.file.path : ''
+
+  var json = {
+    pid, catename, title, author, pic, status, is_best, is_hot, is_new, keywords, description, content, img_url
   }
+
+  var result = await DB.insert('article', json)
   ctx.redirect(ctx.state.__HOST__ + '/admin/article')
+})
+.get('/edit', async (ctx) => {
+  var id = ctx.query.id
+  var catelist = await DB.find('articlecate', {})
+  var result = await DB.find('article', {'_id': DB.getObjectID(id)})
+  await ctx.render('admin/article/edit', {
+    catelist: tools.cateToList(catelist),
+    list: result[0],
+    prevPage: ctx.state.G.prevPage
+  })
+})
+.post('/doEdit', upload.single('img_url'), async (ctx) => {
+  var id = ctx.req.body.id
+  var pid = ctx.req.body.pid
+  var catename = ctx.req.body.catename
+  var title = ctx.req.body.title.trim()
+  var author = ctx.req.body.author.trim()
+  var status = ctx.req.body.status
+  var is_best = ctx.req.body.is_best
+  var is_hot = ctx.req.body.is_hot
+  var is_new = ctx.req.body.is_new
+  var keywords = ctx.req.body.keywords
+  var description = ctx.req.body.description || ''
+  var content = ctx.req.body.content || ''
+  var img_url = ctx.req.file ? ctx.req.file.path : ''
+  var prevPage = ctx.req.body.prevPage
+ 
+  console.log(prevPage)
+  if(img_url) {
+    var json = {
+      pid, catename, title, author, status, is_best, is_hot, is_new, keywords, description, content, img_url
+    }
+  } else {
+    var json = {
+      pid, catename, title, author, status, is_best, is_hot, is_new, keywords, description, content
+    }
+  }
+  var result = await DB.update('article', {'_id': DB.getObjectID(id)}, json)
+  if(prevPage) {
+    ctx.redirect(prevPage)
+  } else {
+    ctx.redirect(ctx.state.__HOST__ + '/admin/article')
+  }
 })
 
 module.exports = router.routes()

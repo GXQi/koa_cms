@@ -28,7 +28,8 @@ router.get('/', async (ctx) => {
   console.log(result)
   await ctx.render('admin/articlecate/edit', {
     list: result[0],
-    catelist: tools.cateToList(allResult)
+    catelist: tools.cateToList(allResult),
+    prevPage: ctx.state.G.prevPage
   })
 })
 .post('/doEdit', async (ctx) => {

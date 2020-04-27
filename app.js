@@ -46,6 +46,7 @@ render(app, {
 });
 
 // 配置静态资源中间件
+// app.use(static('.'));   // 不安全
 app.use(static(__dirname + '/public'));
 
 // 配置层级路由
