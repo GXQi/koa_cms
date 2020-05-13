@@ -28,28 +28,18 @@
   })
  */
 const router = require('koa-router')()
-    , multer = require('koa-multer')
     , DB = require('../../model/db')
     , tools = require('../../model/tools')
 
-var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/upload')   // 配置上传图片的目录  注意图片上传的目录必须存在
-  },
-  filename: function(req, file, cb) {
-    // cb(null, file.filename + '-' + Date.now())    // 图片上传后的命名
-    var fileFormat = (file.originalname).split('.') // 获取后缀名  分隔数组
-    cb(null, Date.now() + '.' + fileFormat[fileFormat.length-1])
-  }
-})
-var upload = multer({storage: storage})
-
 router.get('/', async (ctx) => {
   var page = ctx.query.page || 1
-  var pageSize = ctx.query.pageSize || 3
+  var pageSize = ctx.query.pageSize || 10
   var result = await DB.find('article', {}, {}, {
-    page,
-    pageSize
+    page: page,
+    pageSize: pageSize,
+    sortJson: {
+      "add_time": -1
+    }
   })
   var count = await DB.count('article', {})
   await ctx.render('admin/article/index', {
@@ -65,7 +55,7 @@ router.get('/', async (ctx) => {
     catelist: tools.cateToList(result)
   })
 })
-.post('/doAdd', upload.single('img_url'), async (ctx) => {
+.post('/doAdd', tools.multer().single('img_url'), async (ctx) => {
   var pid = ctx.req.body.pid
   var catename = ctx.req.body.catename
   var title = ctx.req.body.title.trim()
@@ -78,10 +68,14 @@ router.get('/', async (ctx) => {
   var keywords = ctx.req.body.keywords
   var description = ctx.req.body.description || ''
   var content = ctx.req.body.content || ''
-  var img_url = ctx.req.file ? ctx.req.file.path : ''
+  var img_url = ctx.req.file ? ctx.req.file.path.substr(7) : ''
+
+  var add_time = tools.getTime()
+
+  // console.log(img_url)
 
   var json = {
-    pid, catename, title, author, pic, status, is_best, is_hot, is_new, keywords, description, content, img_url
+    pid, catename, title, author, pic, status, is_best, is_hot, is_new, keywords, description, content, img_url, add_time
   }
 
   var result = await DB.insert('article', json)
@@ -97,7 +91,7 @@ router.get('/', async (ctx) => {
     prevPage: ctx.state.G.prevPage
   })
 })
-.post('/doEdit', upload.single('img_url'), async (ctx) => {
+.post('/doEdit', tools.multer().single('img_url'), async (ctx) => {
   var id = ctx.req.body.id
   var pid = ctx.req.body.pid
   var catename = ctx.req.body.catename
@@ -110,10 +104,12 @@ router.get('/', async (ctx) => {
   var keywords = ctx.req.body.keywords
   var description = ctx.req.body.description || ''
   var content = ctx.req.body.content || ''
-  var img_url = ctx.req.file ? ctx.req.file.path : ''
+  var img_url = ctx.req.file ? ctx.req.file.path.substr(7) : ''
   var prevPage = ctx.req.body.prevPage
  
-  console.log(prevPage)
+  // console.log(prevPage)
+  // 属性的简写
+  // 注意是否修改了图片   没上传照片时，不更新img_url
   if(img_url) {
     var json = {
       pid, catename, title, author, status, is_best, is_hot, is_new, keywords, description, content, img_url

@@ -19,5 +19,11 @@ var app = {
       var flag = confirm('您确定要删除吗？')
       return flag
     })
+  },
+  changeSort(el, collectionName, id) {
+    var sortValue = el.value;
+    $.get('/admin/changeSort', {collectionName:collectionName, id: id, sortValue: sortValue}, (data) => {
+      console.log(data)
+    })
   }
 }

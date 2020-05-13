@@ -1,12 +1,16 @@
 const router = require('koa-router')()
     , url = require('url')
+    , ueditor = require('koa2-ueditor')
     , index = require('./admin/index')
     , login = require('./admin/login')
     , user = require('./admin/user')
     , manage = require('./admin/manage')
     , articlecate = require('./admin/articlecate')
     , article = require('./admin/article')
-    , ueditor = require('koa2-ueditor')
+    , focus = require('./admin/focus')
+    , link = require('./admin/link')
+    , nav = require('./admin/nav')
+    , setting = require('./admin/setting')
 
 
 //注意上传图片的路由   ueditor.config.js配置图片post的地址
@@ -52,5 +56,9 @@ router.use('/user', user)
 router.use('/manage', manage)
 router.use('/articlecate', articlecate)
 router.use('/article', article)
+router.use('/focus', focus)
+router.use('/link', link)
+router.use('/nav', nav)
+router.use('/setting', setting)
 
 module.exports = router.routes()

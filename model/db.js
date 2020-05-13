@@ -46,7 +46,8 @@ class Db {
    * DB.find('user', {}, {'title', 1})    // 返回所有数据的title列
    * DB.find('user', {}, {'title', 1}， {    // 返回第二页的数据，每页20条
    *    page: 2,
-   *    pageSize: 20
+   *    pageSize: 20,
+   *    sortJson: {'add_time': -1}
    * })   
    * 
    * js中形参和实参可以不一样 arguments对象接受实参传过来的参数
@@ -65,6 +66,11 @@ class Db {
       var page = json3.page || 1
       var pageSize = json3.pageSize || 20
       var slipNum = (page-1)*pageSize
+      if(json3.sortJson) {
+        var sortJson = json3.sortJson
+      } else {2
+        var sortJson = {}
+      }
     } else {
       console.log('错误传参')
     }
@@ -72,7 +78,7 @@ class Db {
     return new Promise((reslove, reject) => {
       this.connect().then((db) => {
         // var result =  db.collection(collectionName).find(json)
-        var result =  db.collection(collectionName).find(json1, {fields: attr}).skip(slipNum).limit(pageSize)
+        var result =  db.collection(collectionName).find(json1, {fields: attr}).skip(slipNum).limit(pageSize).sort(sortJson)
         result.toArray((err, docs) => {
           if(err) {
             reject(err)
@@ -139,7 +145,7 @@ class Db {
   count(collectionName, json) {
     return new Promise((reslove, reject) => {
       this.connect().then((db) => {
-        var result = db.collection(collectionName).count()
+        var result = db.collection(collectionName).count(json)
         result.then((count) => {
           reslove(count)
         })

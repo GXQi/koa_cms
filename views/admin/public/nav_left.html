@@ -128,7 +128,7 @@
     
 
 
-    <li>
+    <li {{if G.splitUrl[1]=='focus'}} class="active open" {{/if}}>
       <a href="#" class="dropdown-toggle">
         <i class="icon-picture"></i>
         <span class="menu-text"> 轮播图管理 </span>
@@ -137,15 +137,15 @@
       </a>
 
       <ul class="submenu">
-        <li>
-          <a href="#">
+        <li {{if !G.splitUrl[2]}} class="active" {{/if}}>
+          <a href="{{__ROOT__}}/admin/focus">
             <i class="icon-double-angle-right"></i>
             轮播图列表
           </a>
         </li>
 
-        <li>
-          <a href="#">
+        <li {{if G.splitUrl[2]=='add'}} class="active" {{/if}}>
+          <a href="{{__ROOT__}}/admin/focus/add">
             <i class="icon-double-angle-right"></i>
             增加轮播图
           </a>
@@ -155,7 +155,7 @@
       </ul>
     </li>
 
-    <li>
+    <li {{if G.splitUrl[1]=='link'}} class="active open" {{/if}}>
       <a href="#" class="dropdown-toggle">
         <i class="icon-paperclip"></i>
 
@@ -168,15 +168,15 @@
       </a>
 
       <ul class="submenu">
-        <li>
-          <a href="#">
+        <li {{if !G.splitUrl[2]}} class="active" {{/if}}>
+          <a href="{{__ROOT__}}/admin/link">
             <i class="icon-double-angle-right"></i>
             友情链接列表
           </a>
         </li>
 
-        <li>
-          <a href="#">
+        <li {{if G.splitUrl[2]=='add'}} class="active" {{/if}}>
+          <a href="{{__ROOT__}}/admin/link/add">
             <i class="icon-double-angle-right"></i>
             增加友情链接
           </a>
@@ -186,7 +186,7 @@
       
     </li>
 
-    <li>
+    <li {{if G.splitUrl[1]=='nav'}} class="active open" {{/if}}>
       <a href="#" class="dropdown-toggle">
         <i class="icon-list-alt"></i>
 
@@ -199,16 +199,16 @@
       </a>
 
       <ul class="submenu">
-        <li>
-          <a href="#">
-            <i class="icon-double-angle-right"></i>
-            增加导航
-          </a>
-        </li>
-        <li>
-          <a href="#">
+        <li {{if !G.splitUrl[2]}} class="active" {{/if}}>
+          <a href="{{__ROOT__}}/admin/nav">
             <i class="icon-double-angle-right"></i>
             导航列表
+          </a>
+        </li>
+        <li {{if G.splitUrl[2]=='add'}} class="active" {{/if}}>
+          <a href="{{__ROOT__}}/admin/nav/add">
+            <i class="icon-double-angle-right"></i>
+            增加导航
           </a>
         </li>							
       </ul>
@@ -218,8 +218,8 @@
 
     
 
-    <li>
-      <a href="index.html">
+    <li {{if G.splitUrl[1]=='setting'}} class="active open" {{/if}}>
+      <a href="{{__ROOT__}}/admin/setting">
         <i class="icon-cog"></i>
         <span class="menu-text"> 系统设置 </span>
       </a>

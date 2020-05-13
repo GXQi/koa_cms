@@ -1,4 +1,5 @@
 const md5 = require('md5')
+    , multer = require('koa-multer')
 
 let tools = {
   md5(str) {
@@ -24,6 +25,23 @@ let tools = {
     }
     // console.log(firstArr)
     return firstArr
+  },
+  getTime() {
+    return new Date()
+  },
+  multer() {
+    var storage = multer.diskStorage({
+      destination: function(req, file, cb) {
+        cb(null, 'public/upload')   // 配置上传图片的目录  注意图片上传的目录必须存在
+      },
+      filename: function(req, file, cb) {
+        // cb(null, file.filename + '-' + Date.now())    // 图片上传后的命名
+        var fileFormat = (file.originalname).split('.') // 获取后缀名  分隔数组
+        cb(null, Date.now() + '.' + fileFormat[fileFormat.length-1])
+      }
+    })
+    var upload = multer({storage: storage})
+    return upload
   }
 }
 
